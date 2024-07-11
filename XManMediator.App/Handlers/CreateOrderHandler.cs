@@ -6,6 +6,10 @@ namespace XManMediator.App.Handlers
 {
     public class CreateOrderHandler : RequestHandler<CreateOrder, CreateOrderResponse>
     {
+        public CreateOrderHandler()
+        {
+            Console.WriteLine("CreateOrderHandler created");
+        }
         public override CreateOrderResponse Handle(CreateOrder request)
         {
             Console.WriteLine(request.Message);

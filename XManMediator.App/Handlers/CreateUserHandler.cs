@@ -6,6 +6,10 @@ namespace XManMediator.App.Handlers
 {
     public class CreateUserHandler : AsyncRequestHandler<CreateUser, CreateUserResponse>
     { 
+        public CreateUserHandler()
+        {
+            Console.WriteLine("CreateUserHandler created");
+        }
         public override async Task<CreateUserResponse> HandleAsync(CreateUser request)
         {
             Console.WriteLine(request.Message);
