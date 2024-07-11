@@ -4,8 +4,18 @@ using XManMediator.App.Responses;
 
 namespace XManMediator.App.Handlers
 {
-    public class CreateUserHandler : AsyncRequestHandler<CreateUser, CreateUserResponse>
+    public class CreateUserHandler : AsyncRequestHandler<CreateUser, CreateUserResponse>, IDisposable
     { 
+        public CreateUserHandler()
+        {
+            Console.WriteLine("CreateUserHandler created");
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine("CreateUserhandler disposed");
+        }
+
         public override async Task<CreateUserResponse> HandleAsync(CreateUser request)
         {
             Console.WriteLine(request.Message);

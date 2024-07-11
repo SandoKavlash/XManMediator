@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using XManMediator.App.HostedServices;
+using XManMediator.App.JustTestServices.Abstractions;
+using XManMediator.App.JustTestServices.Implementations;
 using XManMediator.Extensions;
 using XManMediator.Models.Enums;
 
@@ -11,8 +13,9 @@ Host
         services.AddXManMediator(config =>
         {
             config.RegisterFromAssemblyContaining<Program>();
-        }, Strategy.Singleton);
+        }, Strategy.Scoped);
 
+        services.AddScoped<ITestService,TestService>();
         services.AddHostedService<TestHostedService>();
     })
     .Build()
