@@ -10,9 +10,10 @@ namespace XManMediator.Implementations
     internal class XManMediatorSingletonStrategy : IXManMediator
     {
         private readonly XManMediatorSingletonConfig _config;
+        private readonly IServiceProvider _serviceProvider;
+
         private readonly object _handlersLock;
         private readonly RequestHandler[] _handlers;
-        private readonly IServiceProvider _serviceProvider;
 
         private readonly object _asyncHandlersLock;
         private readonly AsyncRequestHandler[] _asyncHandlers;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using XManMediator.Abstractions;
+using XManMediator.App.JustTestServices.Abstractions;
 using XManMediator.App.Requests;
 using XManMediator.App.Responses;
 
