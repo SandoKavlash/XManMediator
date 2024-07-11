@@ -5,6 +5,6 @@ namespace XManMediator.App.Requests
 {
     public class CreateOrder : Request<CreateOrder, CreateOrderResponse>
     {
-
+        public string Message { get; set; }
     }
 }

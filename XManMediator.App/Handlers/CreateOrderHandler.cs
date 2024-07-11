@@ -8,7 +8,8 @@ namespace XManMediator.App.Handlers
     {
         public override CreateOrderResponse Handle(CreateOrder request)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(request.Message);
+            return new CreateOrderResponse() { Message = request.Message + " Response" };
         }
     }
 }

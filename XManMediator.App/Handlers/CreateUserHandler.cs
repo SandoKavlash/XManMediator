@@ -4,11 +4,12 @@ using XManMediator.App.Responses;
 
 namespace XManMediator.App.Handlers
 {
-    public class CreateUserHandler : RequestHandler<CreateUser, CreateUserResponse>
-    {
-        public override CreateUserResponse Handle(CreateUser request)
+    public class CreateUserHandler : AsyncRequestHandler<CreateUser, CreateUserResponse>
+    { 
+        public override async Task<CreateUserResponse> HandleAsync(CreateUser request)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(request.Message);
+            return new CreateUserResponse() { Message = request.Message + " Response" };
         }
     }
 }

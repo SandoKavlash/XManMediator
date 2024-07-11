@@ -1,18 +1,46 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using XManMediator.Abstractions.Extensions;
+using XManMediator.Abstractions.Handlers;
 using XManMediator.Models.Configs.Base;
 
 namespace XManMediator.Models.Configs
 {
     public class XManMediatorScopedConfig : IBaseConfig
     {
-        private readonly IServiceCollection _services;
+        internal readonly IServiceCollection services;
+        internal readonly Type handlerType;
+        internal readonly Type asyncHandlerType;
         public XManMediatorScopedConfig(IServiceCollection services)
         {
-            _services = services;
+            asyncHandlerType = typeof(AsyncRequestHandler);
+            handlerType = typeof(RequestHandler);
+            this.services = services;
         }
         public IBaseConfig RegisterFromAssemblyContaining<T>()
         {
-            throw new NotImplementedException();
+            Assembly assembly = typeof(T).Assembly;
+            IEnumerable<Type> allTypes = assembly
+                .GetTypes();
+
+            IEnumerable<IdentifierTypeKV> handlers = allTypes
+                .Where(t => t.IsSubclassOf(handlerType))
+                .Select(type => new IdentifierTypeKV() { Identifier = type.GetHandlerIdentifier(), handler = type });
+
+            IEnumerable<IdentifierTypeKV> asyncHandlers = allTypes
+                .Where(t => t.IsSubclassOf(asyncHandlerType))
+                .Select(type => new IdentifierTypeKV() { Identifier = type.GetAsyncHandlerIdentifier(), handler = type });
+
+            foreach (var kvPair in handlers)
+            {
+                services.AddKeyedScoped(handlerType, kvPair.Identifier, kvPair.handler);
+            }
+
+            foreach (var kvPair in asyncHandlers)
+            {
+                services.AddKeyedScoped(asyncHandlerType, kvPair.Identifier, kvPair.handler);
+            }
+
             return this;
         }
     }

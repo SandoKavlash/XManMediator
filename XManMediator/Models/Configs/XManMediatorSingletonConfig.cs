@@ -2,19 +2,20 @@
 using System.Reflection;
 using XManMediator.Abstractions.Handlers;
 using XManMediator.Models.Configs.Base;
+using XManMediator.Abstractions.Extensions;
 
 namespace XManMediator.Models.Configs
 {
     public class XManMediatorSingletonConfig : IBaseConfig
     {
-        private readonly IServiceCollection _services;
-        private readonly Type _handlerType;
-        private readonly Type _asyncHandlerType;
+        internal readonly IServiceCollection services;
+        internal readonly Type handlerType;
+        internal readonly Type asyncHandlerType;
         public XManMediatorSingletonConfig(IServiceCollection services)
         {
-            _asyncHandlerType = typeof(AsyncRequestHandler);
-            _handlerType = typeof(RequestHandler);
-            _services = services;
+            asyncHandlerType = typeof(AsyncRequestHandler);
+            handlerType = typeof(RequestHandler);
+            this.services = services;
         }
         public IBaseConfig RegisterFromAssemblyContaining<T>()
         {
@@ -22,20 +23,29 @@ namespace XManMediator.Models.Configs
             IEnumerable<Type> allTypes = assembly
                 .GetTypes();
 
-            IEnumerable<Type> handlers = allTypes.Where(t => t.IsSubclassOf(_handlerType));
+            IEnumerable<IdentifierTypeKV> handlers = allTypes
+                .Where(t => t.IsSubclassOf(handlerType))
+                .Select(type => new IdentifierTypeKV() { Identifier = type.GetHandlerIdentifier(), handler = type});
             
-            IEnumerable<Type> asyncHandlers = allTypes.Where(t => t.IsSubclassOf(_asyncHandlerType));
-            
-            foreach(var item in handlers)
+            IEnumerable<IdentifierTypeKV> asyncHandlers = allTypes
+                .Where(t => t.IsSubclassOf(asyncHandlerType))
+                .Select(type => new IdentifierTypeKV() { Identifier = type.GetAsyncHandlerIdentifier(), handler = type});
+
+            foreach(var kvPair in handlers)
             {
-                Console.WriteLine(item.FullName);
+                services.AddKeyedSingleton(handlerType, kvPair.Identifier, kvPair.handler);
             }
-            foreach (var item in asyncHandlers)
+
+            foreach(var kvPair in asyncHandlers)
             {
-                Console.WriteLine(item.FullName);
+                services.AddKeyedSingleton(asyncHandlerType, kvPair.Identifier, kvPair.handler);
             }
+
+
 
             return this;
         }
+
+
     }
 }

@@ -20,6 +20,10 @@ namespace XManMediator.Extensions
 
         private static IServiceCollection HandleScoped(IServiceCollection services, Action<XManMediatorScopedConfig> configAction)
         {
+            services.AddSingleton<IXManMediator, XManMediatorScopedStrategy>();
+            XManMediatorScopedConfig config = new XManMediatorScopedConfig(services);
+            configAction(config);
+            services.AddSingleton<XManMediatorScopedConfig>(config);
             return services;
         }
 
