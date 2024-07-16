@@ -42,4 +42,22 @@ namespace XManMediator.Abstractions.Extensions
             }
         }
     }
+
+    public static class IdentfiersExtensions
+    {
+        public static int AsyncHandlersCount
+        {
+            get
+            {
+                return AsyncRequestIdentifier.counter;
+            }
+        }
+        public static int HandlersCount
+        {
+            get
+            {
+                return RequestIdentifier.counter;
+            }
+        }
+    }
 }

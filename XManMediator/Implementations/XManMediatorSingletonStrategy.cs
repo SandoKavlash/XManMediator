@@ -22,13 +22,13 @@ namespace XManMediator.Implementations
             _serviceProvider = config.services.BuildServiceProvider();
             _handlersLock = new object();
             _asyncHandlersLock = new object();
-            _asyncHandlers = new AsyncRequestHandler[TypeExtensions.AsyncHandlersCount];
-            _handlers = new RequestHandler[TypeExtensions.HandlersCount];
+            _asyncHandlers = new AsyncRequestHandler[IdentfiersExtensions.AsyncHandlersCount];
+            _handlers = new RequestHandler[IdentfiersExtensions.HandlersCount];
             _config = config;
         }
         public TResponse Send<TResponse>(IRequest<TResponse> request)
         {
-            if (_handlers.Length <= request.XManRequestId) throw new ArgumentException("This request type is not registered in specified assembly");
+            if (_handlers.Length <= request.XManRequestId) throw new ArgumentException("Handler for this request not found in specified assembly/assemblies");
             if (_handlers[request.XManRequestId] == null)
             {
                 lock(_handlersLock)
@@ -44,7 +44,7 @@ namespace XManMediator.Implementations
 
         public Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)
         {
-            if (_asyncHandlers.Length <= request.XManRequestId) throw new ArgumentException("This request type is not registered in specified assembly");
+            if (_asyncHandlers.Length <= request.XManRequestId) throw new ArgumentException("Async handler for this request not found in specified assembly/assemblies");
             if (_asyncHandlers[request.XManRequestId] == null)
             {
                 lock (_asyncHandlersLock)

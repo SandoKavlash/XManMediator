@@ -31,21 +31,6 @@ namespace XManMediator.Abstractions.Extensions
 
             return (int)idFieldInfo.GetValue(null);
         }
-        public static int AsyncHandlersCount
-        {
-            get
-            {
-                return AsyncRequestIdentifier.counter;
-            }
-        }
-        public static int HandlersCount
-        {
-            get
-            {
-                return RequestIdentifier.counter;
-            }
-        }
-
         private static Type GetBaseHandlerType(this Type childType, Type genericParentType)
         {
             Type type = childType;

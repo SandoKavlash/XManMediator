@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using XManMediator.Abstractions;
+using XManMediator.Abstractions.Extensions;
 using XManMediator.Abstractions.Handlers;
 using XManMediator.Abstractions.Requests.Base;
 using XManMediator.Models.Configs;
@@ -18,6 +19,7 @@ namespace XManMediator.Implementations
         }
         public TResponse Send<TResponse>(IRequest<TResponse> request)
         {
+            if (IdentfiersExtensions.HandlersCount <= request.XManRequestId) throw new ArgumentException("Handler for this request not found in specified assembly/assemblies");
             using(IServiceScope scoped = _serviceProvider.CreateScope())
             {
                 IServiceProvider provider = scoped.ServiceProvider;
@@ -28,6 +30,7 @@ namespace XManMediator.Implementations
 
         public Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)
         {
+            if (IdentfiersExtensions.AsyncHandlersCount <= request.XManRequestId) throw new ArgumentException("Async handler for this request not found in specified assembly/assemblies");
             using (IServiceScope scoped = _serviceProvider.CreateScope())
             {
                 IServiceProvider provider = scoped.ServiceProvider;
