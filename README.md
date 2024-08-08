@@ -10,3 +10,4 @@ Welcome to the **Optimized MediatR Library**! This project is a performance-enha
 - **Compatibility:** Designed to be a drop-in replacement for MediatR with minimal or no changes required to your existing codebase.
 - **Extensible:** Retains the flexibility and extensibility that MediatR users love, making it easy to adapt to various application needs.
 - **Lightweight:** Keeps the footprint small and dependencies minimal, ensuring a lean integration.
+- **TODO:** I wanted to make features like pipes and notification handlers but as I said this project was for fun and experimental, so I stopped here.
